@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Signup
+{% endblock %}
+
+{% block content %}
+  <section class=" m-auto w-25">
+    <form method="POST" action={{url_for('signup')}}>
+      <div class="form-col">
+        <div class="row mt-2">
+          <input type="text" class="form-control" id="username" placeholder="Choose a username" name="username">
+        </div>
+        <div class="row mt-2">
+          <input type="password" class="form-control" placeholder="Choose a password" name="password">
+        </div>
+        <button type="submit" class="btn btn-primary mt-2">Signup</button>
+      </div>
+    </form>
+  </section>
+{% endblock %}
