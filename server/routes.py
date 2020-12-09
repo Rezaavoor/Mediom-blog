@@ -87,9 +87,14 @@ def signup():
         username = request.form['username']
         password = bcrypt.generate_password_hash(request.form['password'])
 
-        add_user(username, password)
-        flash('You are successfully signed up, please login', 'success')
-        return redirect(url_for('login'))
+        if is_username_available(username):
+            add_user(username, password)
+            flash('You are successfully signed up, please login', 'success')
+            return redirect(url_for('login'))
+        else:
+            flash(
+                'The username is already used, try with another username please', 'danger')
+            return redirect(url_for('signup'))
 
     return render_template('signup.html')
 
@@ -153,5 +158,21 @@ def get_posts():
 
         cur.execute('SELECT * FROM Post')
         return cur.fetchall()
+    except sqlite3.Error as e:
+        print(e)
+
+
+def is_username_available(username):
+    try:
+        conn = db_handler.create_connection()
+        cur = conn.cursor()
+
+        cur.execute('SELECT id FROM User WHERE username=?', (username,))
+        user_id = cur.fetchone()
+        # if user_id:
+        #     return False
+        # else:
+        #     return True
+        return not user_id
     except sqlite3.Error as e:
         print(e)
